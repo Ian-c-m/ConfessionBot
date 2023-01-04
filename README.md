@@ -3,6 +3,7 @@
 A Discord bot for anonymous confessions. Uses slash commands.
 
 Created by Big Spender#7291
+![version](https://img.shields.io/github/v/release/quackersian/confession-bot) ![issues](https://img.shields.io/github/issues/quackersian/confession-bot)
 
 [Invite Link](https://discord.com/api/oauth2/authorize?client_id=1060178760625815634&permissions=2048&scope=bot)
 
