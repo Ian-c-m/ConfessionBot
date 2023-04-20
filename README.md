@@ -1,5 +1,5 @@
 # ConfessionBot
-![pfp](/pfp_small.png?raw=true)
+![pfp](/pfp-small.png?raw=true)
 
 ![version](https://img.shields.io/github/v/release/Ian-c-m/ConfessionBot) ![issues](https://img.shields.io/github/issues/Ian-c-m/ConfessionBot)
 

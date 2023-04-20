@@ -1,6 +1,5 @@
 import logging, disnake, config, sys, sqlite3, tokens
 from disnake.ext import commands
-from dotenv import load_dotenv
 
 #Replace this with the one below once your code is live. Once live, changes to commands can take up to 1 hour to sync.
 #bot = commands.InteractionBot(test_guilds = [config.test_guild_id])
@@ -153,11 +152,113 @@ async def setup(
         logging.info(f"{inter.author} does not have the admin permission.")
         await inter.send("You don't have permission to use this, you need the administrator permisison.", ephemeral=True)
 
+#########################################################################################
+#    INFO FUNCTIONS BELOW
+
+
+
+@bot.slash_command(description="Info about the bot.")
+async def info(
+    inter: disnake.ApplicationCommandInteraction,
+    hidden: bool = commands.Param(default = False, description = "Whether to hide this from others or not.")
+    ):
+
+        logging.info(f"{inter.author} checked bot info.")  
+
+        info_embed = disnake.Embed(title="Space Bot Info")
+        info_embed.add_field(name="Version", value=config.script_version + " - " + config.script_date, inline=True)
+        info_embed.add_field(name="Joined servers", value=len(bot.guilds), inline=True)
+        info_embed.add_field(name="Discord Support Server", value=config.discord_server, inline=False)
+        info_embed.add_field(name="Bot Invite Link", value=config.invite_link_short, inline=False)
+        info_embed.add_field(name="Bot Code on Github", value=config.github_link, inline=False)
+               
+        await inter.send(embed=info_embed, ephemeral=hidden)
+
+
+
+
+#########################################################################################
+#    SECRET FUNCTIONS BELOW
+    
+@bot.slash_command(description="Super Secret")
+async def server_info(
+    inter: disnake.ApplicationCommandInteraction,
+    short: bool = commands.Param(default=True, description="Show only the latest 10 joined servers, or the full info.")
+    ):
+    
+    #only the bot owner can use this command
+    if inter.author == bot.owner:   
+        
+        joined_guilds = []
+        guild_count = len(bot.guilds)
+        
+
+        for guild in bot.guilds:
+            #gather guild info in a tuple in a list(?) so we can sort by joined date in the embed.
+            join_date = guild.me.joined_at
+            join_date = join_date.strftime("%Y-%m-%d %H:%M:%S")
+            joined_guilds.append((join_date, guild.name, guild.member_count))            
+        
+        #sorting the guilds by join date newest to oldest
+        joined_guilds.sort(key = lambda tup: tup[0], reverse=True) # from https://stackoverflow.com/questions/3121979/
+        
+        
+        
+        if short == True:
+        #only show the 10 most recently joined guilds
+            guild_embed = disnake.Embed(title="Joined Server Info")
+
+            for i in range(min(10, guild_count)):
+                guild_embed.add_field(name=joined_guilds[i][1], value=f"Joined on {joined_guilds[i][0]}. {joined_guilds[i][2]} members.", inline=False)
+            
+            guild_embed.set_footer(text=f"{config.bot_name} is in {guild_count} servers.")
+            await inter.send(embed=guild_embed, ephemeral=True)
+
+        
+        else:
+        #show all the guild info in one big message. 2,000 character limit
+          
+            guild_message = f"**__{config.bot_name} is in {guild_count} servers__** \n\n"
+            for guild in joined_guilds:
+                guild_message += f"__{guild[1]}__ \n"
+                guild_message += f"*Joined on {guild[0]}. {guild[2]} members.* \n\n"
+            
+            
+            try:
+                await inter.send(guild_message, ephemeral=True)
+
+            
+            except disnake.HTTPException as e:
+                if e.code == 50035:
+                    #the message we tried to send was more than 2000 characters, so blocked by the API.
+                    logging.warning(f"{config.bot_name} is in {guild_count} servers, message length was {len(guild_message)}")
+                    await inter.send("I'm so popular, I'm in too many guilds to mention!")
+                    
+
+                else:
+                    #some other HTTP exception
+                    logging.exception(e)
+                    await inter.send("Something went wrong, sorry!")
+                    
+            
+            except Exception as e:
+                #some other exception
+                logging.exception(e)
+                await inter.send("Something went wrong, sorry!")
+                
+          
+
+    else:
+        #user was not allowed to use this command.
+        logging.info(f"{inter.author} tried to use the server_info command but was not authorised.")
+        inter.send("That's not a command, it's a space station.", ephemeral=True)
+        return
+
+
 
 
 #----------------------------------------BOT RUN----------------------------------------#
 if __name__ == "__main__":
-    load_dotenv()
     setup_logging()
     setup_db()
     bot.run(tokens.cfb_live_token)
