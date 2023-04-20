@@ -1,10 +1,9 @@
 # ConfessionBot
+![pfp](/pfp_small.png?raw=true)
 
-![version](https://img.shields.io/github/v/release/quackersian/confession-bot) ![issues](https://img.shields.io/github/issues/quackersian/confession-bot)
+![version](https://img.shields.io/github/v/release/ian-c-m/confession-bot) ![issues](https://img.shields.io/github/issues/ian-c-m/confession-bot)
 
 A Discord bot for anonymous confessions. Uses slash commands.
-
-Created by Big Spender#7291
 
 [Invite Link](https://discord.com/api/oauth2/authorize?client_id=1060178760625815634&permissions=2048&scope=bot)
 
