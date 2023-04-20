@@ -1,7 +1,7 @@
 # ConfessionBot
 ![pfp](/pfp_small.png?raw=true)
 
-![version](https://img.shields.io/github/v/release/Ian-c-m/ConfessionBot) ![issues](https://img.shields.io/github/issues/Ian-c-m/ConfessionBot)
+![version](https://img.shields.io/github/v/release/ian-c-m/confession-bot) ![issues](https://img.shields.io/github/issues/ian-c-m/confession-bot)
 
 A Discord bot for anonymous confessions. Uses slash commands.
 
