@@ -1,9 +1,9 @@
-import logging, disnake, config, os, sys, sqlite3
+import logging, disnake, config, sys, sqlite3, tokens
 from disnake.ext import commands
 from dotenv import load_dotenv
 
 #Replace this with the one below once your code is live. Once live, changes to commands can take up to 1 hour to sync.
-#bot = commands.InteractionBot(test_guilds = [int(os.environ.get("TEST_GUILD_ID"))])
+#bot = commands.InteractionBot(test_guilds = [config.test_guild_id])
 bot = commands.InteractionBot()
 
 
@@ -91,7 +91,7 @@ async def confess(
     confession: str
     ):
 
-    if confession is None:
+    if confession is None or confession == "" or len(confession) == 0:
         await inter.send("You did not enter a confession.", ephemeral=True)
         logging.debug(f"{inter.author} submitted an empty confession.")
     
@@ -106,10 +106,10 @@ async def confess(
             
         except Exception as e:
             logging.warning(f"Failed to find {inter.guild_id} in db.")
-            await inter.send("Unable to submit your confession, no confessional channel has been setup (run /setup first).", ephemeral=True)
+            await inter.send("Unable to submit your confession, no confessional channel has been setup (admins need to run /setup first).", ephemeral=True)
             
         else:
-            await confession_channel.send(f"**A new confession**: \n`{confession}`")
+            await confession_channel.send(f"**A new confession has been submitted**: \n`{confession}`")
             await inter.send("Confession submitted successfully!", ephemeral=True)
             logging.info(f"Successfuly submitted confession.")
         
@@ -160,4 +160,4 @@ if __name__ == "__main__":
     load_dotenv()
     setup_logging()
     setup_db()
-    bot.run(os.environ.get("DISCORD_LIVE_TOKEN"))
+    bot.run(tokens.cfb_live_token)
