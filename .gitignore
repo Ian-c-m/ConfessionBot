@@ -1,3 +1,8 @@
+#Custom
+tokens.py
+confesion.db
+ConfessionBot.log
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
