@@ -165,7 +165,7 @@ async def info(
 
         logging.info(f"{inter.author} checked bot info.")  
 
-        info_embed = disnake.Embed(title="Space Bot Info")
+        info_embed = disnake.Embed(title=f"{config.bot_name} Info")
         info_embed.add_field(name="Version", value=config.script_version + " - " + config.script_date, inline=True)
         info_embed.add_field(name="Joined servers", value=len(bot.guilds), inline=True)
         info_embed.add_field(name="Discord Support Server", value=config.discord_server, inline=False)
